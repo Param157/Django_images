@@ -1,0 +1,64 @@
+{% extends 'base.html' %} {% load static %} {% block body %}
+<form method="POST" action='/views_employee_details' enctype="multipart/form-data">
+    {% csrf_token %}
+<h1 class="text-center">Employee Details</h1>
+<hr>
+
+<div class="container">
+    <table style="width:100%;" id="tabl">
+        <tr>
+            <th>Emp Id</th>
+            <th>Name</th>
+            <th>Contact</th>
+            <th>Email</th>
+            <th>Dept</th>
+            <th>DOJ</th>
+            <th>DOB</th>
+            <th>Photo</th>
+            <th>View Emp Details</th>
+            <th>
+                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                <label class="form-check-label" for="flexCheckDefault">
+                    Select All
+                </label>
+            </th>
+            <th><button type="submit" id="delete-btn" class="btn btn-danger" onclick="getvalues()">Delete</button></th>
+        </tr>
+        {% for emp in emp_details %}
+        <tr>
+            <td>{{emp.empid}}</td>
+            <td>{{emp.name}}</td>
+            <td>{{emp.contact}}</td>
+            <td>{{emp.email}}</td>
+            <td>{{emp.dept}}</td>
+            <td>{{emp.doj}}</td>
+            <td>{{emp.dob}}</td>
+            {% comment %}
+
+            <td><img src="{{emp.empphoto.url}}" width="100px" height="100px"></td> {% endcomment %}
+            <td><img src="{{emp.get_photo_url}}" width="100px" height="100px"></td>
+            <td><a href="/viewemp/{{ emp.id }}">View Details</a></td>
+            <td><input type="checkbox" value="{{emp.id}}"></td>
+        </tr>
+        {% endfor %}
+
+    </table>
+    <b id="displayvalues"></b>
+</div>
+</form>
+<script>
+    function getvalues() {
+        var selected = new Array();
+        var chkbox = document.getElementById("tabl");
+        var selchk = chkbox.getElementByTagName("input");
+        for (var i = 0; i < selchk.lenght; i++) {
+            if (selchk[i].checked) {
+                selected.push(selchk[i].value);
+            }
+        }
+        if (selected.length > 0) {
+            document.getElementById("displayvalues").innerHTML = selected;
+        }
+    }
+</script>
+{% endblock body %}
